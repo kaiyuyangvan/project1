@@ -3,14 +3,15 @@ General Information:
 
 Here are the preconditions to the test assignment:
 
-1. developer PC ip address is known and is able to be connected by ansible server
+1. VMs are generated using virtual box & vagrant tool
+2  Assume that developer PC ip address is known and is able to be connected by ansible server
    e.g. developer ip: 192.168.1.80
-2. bridge network with static ip addresses are assigned when VM are created 
+3. Assume to use public bridge network with static ip addresses to create VMs 
    e.g. mysql1 ip: 192.168.1.85
    e.g. mysql2 ip: 192.168.1.86
    note: if VM use DHCP setting, then additional steps need to be executed to get VMs ip address
-3. The following files are generated for this task assignment:
-   hosts - ansible configure file with global variables setting
+4. The following files are generated for this task assignment:
+   hosts - ansible configuration file with global variables setting
    createVM.yml - Ansible code to create VM
    createDB.yml - Ansible code to create DB on VM
    createCron.yml - Ansible code to create cron jobs on mysql1
@@ -30,7 +31,7 @@ To create VMs, on ansible server side, run ansible-playbook createVM.yml, which 
 To destory the VM, on ansible sever side, run ansible-playbook  destroy.yml, which will
      -destroy VMs
 
-Detailed informatin about VMs are included in Vagrantfile
+Vagrantfile is the detailed codes about VMs generation
 
 Task2:
 on ansible server side, run ansible-playbook createDB.yml, which will
@@ -59,7 +60,7 @@ On mysql2, run ./verifyBackyp.sh [backup_db_filename] which will includes:
 Further more, user can also manually random check database contents
 
 TestCase2:
-create a simple test db with table/contents on mysql1, verify the test db table/content are same on remote recover db on mysql2 
+create a simple test db with table/contents on mysql1, verify the test db table/content are same after recovered on remote recover db on mysql2 
 
 
 
