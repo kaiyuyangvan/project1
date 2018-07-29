@@ -1,0 +1,7 @@
+---
+- hosts: developer
+  remote_user: "{{remote_user}}"
+  
+  tasks:
+  - name: destroy remote VMs
+    command: chdir= "{{remote_tmp_folder}}" vagrant destroy -f

@@ -1,0 +1,42 @@
+---
+- hosts: mysql2
+  remote_user: "{{remote_user}}"
+  tasks:
+   - name: "Create backup folder"
+     file:  
+      path: "{{db_backup_folder}}"
+      state: directory
+
+   - name : "Copy verifyBackupDB.sh"
+     copy: src="{{source_recover_db_script}}" dest="{{db_backup_folder}}" mode=0744 
+     
+- hosts: mysql1
+  vars:
+     db_backup_ip : 192.168.1.86
+     local_backup_hour : 19
+     local_cleanup_hour: 18
+     remote_backup_hour: 21
+     local_backup_save_days: 10
+     backup_prefix_filename : backup_mysql1_
+  remote_user: "{{remote_user}}"
+  
+  tasks:
+   - name: "Create backup folder for {{backup_db_ip}}"
+     file:  
+      path: "{{db_backup_folder}}"
+      state: directory
+
+   - name: "Setup backup cron job"
+     cron:
+       hour: "{{local_backup_hour}}"
+       job: "/usr/bin/mysqldump --opt --all-databases  {{db_user}} -p {{db_passwd}} >{{db_backup_folder}}{{backup_prefix_filename}}$(date +\\%Y\\%m\\%d\\%H).sql"
+   - name: "Setup cleanup obselte db backup files  cron job"
+     cron:
+       hour: "{{local_cleanup_hour}}"
+       job: "find {{db_backup_folder}} -name \"*.sql\" -mtime +{{local_backup_save_days}} -delete"
+
+   - name: "Setup contab job to copy mysql1 backup database to mysql2 "
+     cron:
+        hour: "{{remote_backup_hour}}"
+        job: "sshpass -p {{db_passwd}} scp {{db_backup_folder}}{{backup_prefix_filename}}$(date +\\%Y\\%m\\%d\\%H).sql  {{remote_user}}@{{db_backup_ip}}:{{db_backup_folder}}"
+

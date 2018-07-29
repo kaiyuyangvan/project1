@@ -1,0 +1,25 @@
+---
+- hosts: developer
+  remote_user: "{{remote_user}}"
+  
+  tasks:
+  - name: Create tmp folder on remote desktop
+    file:  
+     path: "{{remote_tmp_folder}}"
+     state: directory
+
+  - name: Copy Vagrantfile to remote desktop tmp folder
+    copy: src="{{local_vagrantfile}}" dest="{{remote_tmp_folder}}"
+
+  - name: Install virtualbox package
+    apt: name={{item}} state=present
+    with_items:
+       - virtualbox
+
+  - name: Install vagrant package
+    apt: name={{item}} state=present
+    with_items:
+       - vagrant
+
+  - name: run vagrant up to create new VM
+    command: chdir="{{remote_tmp_folder}}" vagrant up
