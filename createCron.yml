@@ -29,7 +29,7 @@
    - name: "Setup backup cron job"
      cron:
        hour: "{{local_backup_hour}}"
-       job: "/usr/bin/mysqldump --opt --all-databases  {{db_user}} -p {{db_passwd}} >{{db_backup_folder}}{{backup_prefix_filename}}$(date +\\%Y\\%m\\%d\\%H).sql"
+       job: "/usr/bin/mysqldump -u {{db_user}} -p{{db_passwd}} --opt --all-databases >{{db_backup_folder}}{{backup_prefix_filename}}$(date +\\%Y\\%m\\%d\\%H).sql"
    - name: "Setup cleanup obselte db backup files  cron job"
      cron:
        hour: "{{local_cleanup_hour}}"
