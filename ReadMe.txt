@@ -30,7 +30,7 @@ To create VMs, on ansible server side, run ansible-playbook createVM.yml, which 
 To destory the VM, on ansible sever side, run ansible-playbook  destroy.yml, which will
      -destroy VMs
 
-Detailed informatin about VMs are included in Vagrantfile
+Detailed codes about VMs creation are included in Vagrantfile
 
 Task2:
 on ansible server side, run ansible-playbook createDB.yml, which will
